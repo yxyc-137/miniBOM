@@ -50,6 +50,15 @@ public class FeignController {
         params.addCondition("id", ConditionType.EQUAL, id);
         return userFeign.find("User", var1);
     }
+
+    @RequestMapping(value = "/user/findByName/{name}", method = RequestMethod.POST)
+    public RDMResultVO findByName(@PathVariable String name) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("name", ConditionType.EQUAL, name);
+        return userFeign.find("User", var1);
+    }
     //根据id查询用户（id传入请求体）
     @RequestMapping(value = "/user/get", method = RequestMethod.POST)
     public RDMResultVO get(@RequestBody RDMParamVO<User> var1){
@@ -72,9 +81,14 @@ public class FeignController {
         return userFeign.update("User", var1);
     }
     //登录功能
-//    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-//    public RDMResultVO login(@RequestBody RDMParamVO<User> var1) {
-//
-//    }
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public boolean login(@RequestBody RDMParamVO<QueryRequestVo> var1) {
+        //根据用户名和密码查找用户
+        RDMResultVO res = userFeign.find("User", var1);
+        //如果查找到了用户，返回true
+        if (res.getData() != null)  return true;
+        //否则返回false
+        return false;
+    }
 }
 
