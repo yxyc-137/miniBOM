@@ -15,6 +15,8 @@ import com.huawei.innovation.rdm.minibom.bean.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
+
 /**
  * TestController
  *
@@ -82,13 +84,29 @@ public class FeignController {
     }
     //登录功能
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public boolean login(@RequestBody RDMParamVO<QueryRequestVo> var1) {
-        //根据用户名和密码查找用户
-        RDMResultVO res = userFeign.find("User", var1);
-        //如果查找到了用户，返回true
-        if (res.getData() != null)  return true;
-        //否则返回false
-        return false;
+    public boolean login(@RequestBody User user) {
+        //根据用户名查找用户
+        System.out.println(user);
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("name", ConditionType.EQUAL, user.getName());
+        RDMResultVO result = userFeign.find("User", var1);
+        //如果用户不存在
+        if(result.getData().size() == 0){
+            return false;
+        }
+        //如果用户存在，判断密码是否正确
+        Class<?> map = result.getData().get(0).getClass();
+        map.cast(result.getData().get(0));
+        LinkedHashMap<String, Object> userMap = (LinkedHashMap<String, Object>) result.getData().get(0);
+        User user1 = new User();
+        user1.setId(Long.valueOf((String)userMap.get("id")));
+        user1.setName((String)userMap.get("name"));
+        user1.setPassword((String)userMap.get("password"));
+        user1.setEmail((String)userMap.get("email"));
+        System.out.println(user1);
+        return user1.getPassword().equals(user.getPassword());
     }
 }
 

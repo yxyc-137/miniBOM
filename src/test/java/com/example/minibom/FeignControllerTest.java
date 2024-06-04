@@ -2,6 +2,7 @@ package com.example.minibom;
 
 import com.example.minibom.controller.FeignController;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
+import com.huawei.innovation.rdm.minibom.bean.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,14 @@ public class FeignControllerTest {
 //        RDMResultVO res = feignController.find();
 //        System.out.print(res);
 //    }
+    @Test
+    public void testLogin() {
+        User user = new User();
+        user.setName("xlx");
+        user.setPassword("123456!");
+        boolean res = feignController.login(user);
+        System.out.print(res);
+    }
 
 
 }
