@@ -63,23 +63,30 @@ public class FeignController {
     }
     //根据id查询用户（id传入请求体）
     @RequestMapping(value = "/user/get", method = RequestMethod.POST)
-    public RDMResultVO get(@RequestBody RDMParamVO<User> var1){
+    public RDMResultVO get(@RequestBody User user){
+        RDMParamVO<User> var1 = new RDMParamVO<>();
+        var1.setParams(user);
         return userFeign.get("User", var1);
     }
 
     @RequestMapping(value = "/user/create", method = RequestMethod.POST)
-    public RDMResultVO create(@RequestBody RDMParamVO<User> var1) {
-        System.out.println(var1);
+    public RDMResultVO create(@RequestBody User user) {
+        RDMParamVO<User> var1 = new RDMParamVO<>();
+        var1.setParams(user);
         return userFeign.create("User", var1);
     }
 
     @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
-    public RDMResultVO delete(@RequestBody RDMParamVO<User> var1) {
+    public RDMResultVO delete(@RequestBody User user) {
+        RDMParamVO<User> var1 = new RDMParamVO<>();
+        var1.setParams(user);
         return userFeign.delete("User", var1);
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.POST)
-    public RDMResultVO update(@RequestBody RDMParamVO<User> var1) {
+    public RDMResultVO update(@RequestBody User user) {
+        RDMParamVO<User> var1 = new RDMParamVO<>();
+        var1.setParams(user);
         return userFeign.update("User", var1);
     }
     //登录功能
