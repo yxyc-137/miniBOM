@@ -109,6 +109,14 @@
             <version>2.0.0</version>
         </dependency>
 
+        <!--引入JWT-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.10.0</version>
+        </dependency>
+
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

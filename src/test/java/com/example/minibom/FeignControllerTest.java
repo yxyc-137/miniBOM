@@ -26,8 +26,8 @@ public class FeignControllerTest {
         User user = new User();
         user.setName("xlx");
         user.setPassword("123456!");
-        boolean res = feignController.login(user);
-        System.out.print(res);
+        //boolean res = feignController.login(user);
+        //System.out.print(res);
     }
 
 

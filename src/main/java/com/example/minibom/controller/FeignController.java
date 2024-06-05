@@ -5,6 +5,8 @@ package com.example.minibom.controller;
  */
 
 import com.example.minibom.feign.UserFeign;
+import com.example.minibom.service.UserService;
+import com.example.minibom.utils.JWTUtils;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
@@ -13,9 +15,13 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 
 import com.huawei.innovation.rdm.minibom.bean.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * TestController
@@ -27,6 +33,9 @@ import java.util.LinkedHashMap;
 public class FeignController {
     @Autowired
     private UserFeign userFeign;
+
+    @Autowired
+    private UserService userService;
 
     //打印request日志
 
@@ -91,29 +100,30 @@ public class FeignController {
     }
     //登录功能
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public boolean login(@RequestBody User user) {
-        //根据用户名查找用户
-        System.out.println(user);
-        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
-        QueryRequestVo params = new QueryRequestVo();
-        var1.setParams(params);
-        params.addCondition("name", ConditionType.EQUAL, user.getName());
-        RDMResultVO result = userFeign.find("User", var1);
-        //如果用户不存在
-        if(result.getData().size() == 0){
-            return false;
+    public ResponseEntity<?> login(@RequestBody User user1) {
+        try {
+            User user = userService.login(user1);
+            System.out.println(user);
+            if (user != null) {
+                // 假设这里调用JWTUtils生成令牌
+                String token = JWTUtils.getToken(user.getId(), user.getName());
+                Map<String, Object> response = new HashMap<>();
+                response.put("state", true);
+                response.put("msg", "认证成功");
+                response.put("token", token);
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, String> response = new HashMap<>();
+                response.put("state", "false");
+                response.put("msg", "用户不存在或密码错误");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("state", "false");
+            response.put("msg", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-        //如果用户存在，判断密码是否正确
-        Class<?> map = result.getData().get(0).getClass();
-        map.cast(result.getData().get(0));
-        LinkedHashMap<String, Object> userMap = (LinkedHashMap<String, Object>) result.getData().get(0);
-        User user1 = new User();
-        user1.setId(Long.valueOf((String)userMap.get("id")));
-        user1.setName((String)userMap.get("name"));
-        user1.setPassword((String)userMap.get("password"));
-        user1.setEmail((String)userMap.get("email"));
-        System.out.println(user1);
-        return user1.getPassword().equals(user.getPassword());
     }
 }
 
