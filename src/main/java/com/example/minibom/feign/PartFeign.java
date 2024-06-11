@@ -7,10 +7,7 @@ package com.example.minibom.feign;
  * Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
  */
 
-import com.huawei.innovation.rdm.coresdk.basic.dto.MasterIdModifierDTO;
-import com.huawei.innovation.rdm.coresdk.basic.dto.VersionCheckInDTO;
-import com.huawei.innovation.rdm.coresdk.basic.dto.VersionCheckOutDTO;
-import com.huawei.innovation.rdm.coresdk.basic.dto.VersionUpdateAndCheckinDTO;
+import com.huawei.innovation.rdm.coresdk.basic.dto.*;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
@@ -66,5 +63,17 @@ public interface PartFeign {
 
     @PostMapping("dynamic/api/{modelName}/checkin")
     RDMResultVO checkin(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionCheckInDTO> var1);
+
+    @PostMapping("dynamic/api/{modelName}/getAllVersions")
+    RDMResultVO getAllVersions(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionMasterDTO> var1);
+
+    @PostMapping("dynamic/api/{modelName}/revise")
+    RDMResultVO revise(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionReviseDTO> var1);
+
+    @PostMapping("dynamic/api/{modelName}/deleteLatestVersion")
+    RDMResultVO deleteLatestVersion(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionMasterModifierDTO> var1);
+
+    @PostMapping("dynamic/api/{modelName}/deleteBranch")
+    RDMResultVO deleteBranch(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionMasterModifierDTO> var1);
 }
 
