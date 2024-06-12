@@ -51,6 +51,7 @@ public class ClassificationNodeController {
         var1.setParams(params);
         return classificationNodeFeign.find("ClassificationNode", var1);
     }
+
     //POST方法：根据分类节点id获取分类节点信息（输入参数id）
     @RequestMapping(value = "classificationNode/get", method = RequestMethod.POST)
     public RDMResultVO get(@RequestBody ClassificationNode classificationNode) {
@@ -59,6 +60,25 @@ public class ClassificationNodeController {
         return classificationNodeFeign.get("ClassificationNode", var1);
     }
 
+    //根据id查找分类节点信息（直接在url中传入id）
+    @RequestMapping(value = "/classificationNode/findById/{id}", method = RequestMethod.POST)
+    public RDMResultVO findById(@PathVariable String id) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("id", ConditionType.EQUAL, id);
+        return classificationNodeFeign.find("ClassificationNode", var1);
+    }
+
+    //根据name查找分类节点信息（直接在url中传入name）
+    @RequestMapping(value = "/classificationNode/findByName/{name}", method = RequestMethod.POST)
+    public RDMResultVO findByName(@PathVariable String name) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("name", ConditionType.EQUAL, name);
+        return classificationNodeFeign.find("ClassificationNode", var1);
+    }
     //POST方法：创建分类节点（输入参数ClassificationNode(传name和nameEn）
     @RequestMapping(value = "classificationNode/create", method = RequestMethod.POST)
     public RDMResultVO create(@RequestBody ClassificationNode classificationNode) {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(url = "${idme.endpoint}", name = "exa-service")
 public interface EXADefinitionFeign {
-    @GetMapping("rdm/basic/api/EXADefinition/find/{pageSize}/{curPage}")
+    @GetMapping("rdm/basic/api/EXADefinition/find/100/1")
     RDMResultVO find(@RequestBody RDMParamVO<QueryRequestVo> var1);
 
     @PostMapping("rdm/common/api/{modelName}/get")

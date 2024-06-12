@@ -2,6 +2,7 @@ package com.example.minibom.controller;
 
 import com.example.minibom.feign.EXADefinitionFeign;
 import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdDecryptDTO;
+import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
@@ -21,7 +22,7 @@ public class EXADefinitionController {
     //属性只写了find和get方法
 
     //POST方法：分页查询属性信息（路径入参pageSize和curPage)
-    @RequestMapping(value = "exaDefinition/find/{pageSize}/{curPage}", method = RequestMethod.POST)
+    @RequestMapping(value = "exaDefinition/find", method = RequestMethod.POST)
     public RDMResultVO find() {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
@@ -34,6 +35,25 @@ public class EXADefinitionController {
         RDMParamVO<PersistObjectIdDecryptDTO> var1 = new RDMParamVO<>();
         var1.setParams(dto);
         return exaDefinitionFeign.get("EXADefinition", var1);
+    }
+
+    @RequestMapping(value = "/exaDefinition/findById/{id}", method = RequestMethod.POST)
+    public RDMResultVO findById(@PathVariable String id) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("id", ConditionType.EQUAL, id);
+        return exaDefinitionFeign.find(var1);
+    }
+
+    //根据name查找分类节点信息（直接在url中传入name）
+    @RequestMapping(value = "/exaDefinition/findByName/{name}", method = RequestMethod.POST)
+    public RDMResultVO findByName(@PathVariable String name) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("name", ConditionType.EQUAL, name);
+        return exaDefinitionFeign.find(var1);
     }
 //    //POST方法：创建属性（输入参数EXADefiniton(传name和nameEn）
 //    @RequestMapping(value = "exaDefinition/create", method = RequestMethod.POST)
