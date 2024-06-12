@@ -24,9 +24,8 @@ public interface ClassificationNodeFeign {
     @GetMapping("rdm/basic/api/ClassificationNode/getCategoryNodeInfo")
     RDMResultVO getCategoryNodeInfo(@RequestParam("linkId") Long linkId);
 
-    @PostMapping("rdm/common/api/{modelName}/find/{pageSize}/{curPage}")
-    RDMResultVO find(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<QueryRequestVo> var1,
-                     @PathVariable("pageSize") Integer pageSize, @PathVariable("curPage") Integer curPage);
+    @PostMapping("rdm/common/api/{modelName}/find")
+    RDMResultVO find(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<QueryRequestVo> var1);
 
     @PostMapping("rdm/common/api/{modelName}/get")
     RDMResultVO get(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<ClassificationNode> var1);

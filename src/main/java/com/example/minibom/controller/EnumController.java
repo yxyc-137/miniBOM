@@ -7,6 +7,8 @@ import com.huawei.innovation.rdm.bean.interfaces.EnumeratorViewDTO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
+import com.huawei.innovation.rdm.minibom.bean.enumerate.AssemblyMode;
+import com.huawei.innovation.rdm.minibom.bean.enumerate.PartSource;
 import feign.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,17 @@ import java.util.List;
 @RestController
 public class EnumController {
 
+    //枚举值查询(创建part下拉菜单选择）
+    /*
+    AssemblyMode:
+    Separable("Separable", "可分离", "Separable", "Separable"),
+    Inseparable("Inseparable", "不可分离", "Inseparable", "Inseparable"),
+    Part("Part", "零件", "Part", "Part");
+    PartSource:
+    Make("Make", "制造", "Make", "Make"),
+    Buy("Buy", "购买", "Buy", "Buy"),
+    Buy_SingleSoource("Buy_SingleSoource", "购买—单一供应源", "Buy_SingleSoource", "Buy_SingleSoource");
+    */
     @Autowired
     private EnumFeign enumFeign;
     @GetMapping("enum/query")

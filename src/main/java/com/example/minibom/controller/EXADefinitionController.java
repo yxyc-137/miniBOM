@@ -22,12 +22,11 @@ public class EXADefinitionController {
 
     //POST方法：分页查询属性信息（路径入参pageSize和curPage)
     @RequestMapping(value = "exaDefinition/find/{pageSize}/{curPage}", method = RequestMethod.POST)
-    public RDMResultVO find(@PathVariable(value = "pageSize",required = false) Integer pageSize,
-                            @PathVariable(value = "curPage",required = false) Integer curPage) {
+    public RDMResultVO find() {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
-        return exaDefinitionFeign.find(var1, pageSize, curPage);
+        return exaDefinitionFeign.find(var1);
     }
     //POST方法：根据分类节点id获取属性信息（输入参数id）
     @RequestMapping(value = "exaDefinition/get", method = RequestMethod.POST)

@@ -44,13 +44,12 @@ public class ClassificationNodeController {
     }
 
     //POST方法：分页查询分类节点（路径入参pageSize和curPage)
-    @RequestMapping(value = "classificationNode/find/{pageSize}/{curPage}", method = RequestMethod.POST)
-    public RDMResultVO find(@PathVariable(value = "pageSize",required = false) Integer pageSize,
-                            @PathVariable(value = "curPage",required = false) Integer curPage) {
+    @RequestMapping(value = "classificationNode/find", method = RequestMethod.POST)
+    public RDMResultVO find() {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
-        return classificationNodeFeign.find("ClassificationNode", var1, pageSize, curPage);
+        return classificationNodeFeign.find("ClassificationNode", var1);
     }
     //POST方法：根据分类节点id获取分类节点信息（输入参数id）
     @RequestMapping(value = "classificationNode/get", method = RequestMethod.POST)
