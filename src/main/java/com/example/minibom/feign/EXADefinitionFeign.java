@@ -6,6 +6,7 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.xdm.bean.entity.ClassificationNode;
 import com.huawei.innovation.rdm.xdm.bean.entity.EXADefinition;
+import com.huawei.innovation.rdm.xdm.bean.relation.EXADefinitionLink;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionCreateDTO;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionQueryViewDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @FeignClient(url = "${idme.endpoint}", name = "exa-service")
 public interface EXADefinitionFeign {
@@ -30,4 +33,19 @@ public interface EXADefinitionFeign {
 
     @PostMapping("rdm/basic/api/{modelName}/delete")
     RDMResultVO delete(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<EXADefinition> var1);
+
+    @GetMapping("rdm/basic/api/EXADefinitionLink/find/100/1")
+    RDMResultVO findLink(@RequestBody RDMParamVO<QueryRequestVo> var1);
+
+    @PostMapping("rdm/common/api/EXADefinitionLink/delete")
+    RDMResultVO deleteLink(@RequestBody RDMParamVO<EXADefinitionLink> var1);
+
+    @PostMapping("rdm/common/api/EXADefinitionLink/create")
+    RDMResultVO createLink(@RequestBody RDMParamVO<EXADefinitionLink> var1);
+
+    @PostMapping("rdm/common/api/EXADefinitionLink/batchCreate")
+    RDMResultVO batchCreateLink(@RequestBody RDMParamVO<List<EXADefinitionLink>> var1);
+
+    @PostMapping("rdm/common/api/EXADefinitionLink/batchDelete")
+    RDMResultVO batchDeleteLink(@RequestBody RDMParamVO<List<EXADefinitionLink>> var1);
 }

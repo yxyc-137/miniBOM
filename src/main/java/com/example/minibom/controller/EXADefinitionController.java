@@ -8,10 +8,13 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.xdm.bean.entity.ClassificationNode;
 import com.huawei.innovation.rdm.xdm.bean.entity.EXADefinition;
+import com.huawei.innovation.rdm.xdm.bean.relation.EXADefinitionLink;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionCreateDTO;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionQueryViewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/feign")
 @RestController
@@ -78,5 +81,44 @@ public class EXADefinitionController {
 //        var1.setParams(exaDefinition);
 //        return exaDefinitionFeign.delete("EXADefinition", var1);
 //    }
+
+    @RequestMapping(value = "/exaDefinitionLink/findAll", method = RequestMethod.POST)
+    public RDMResultVO findAllLink() {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        return exaDefinitionFeign.findLink(var1);
+    }
+
+    //根据分类节点id查找扩展属性
+    @RequestMapping(value = "/exaDefinitionLink/findById/{id}", method = RequestMethod.POST)
+    public RDMResultVO findLinkById(@PathVariable String id) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("target.id", ConditionType.EQUAL, id);
+        return exaDefinitionFeign.findLink(var1);
+    }
+
+    @RequestMapping(value = "/exaDefinitionLink/create", method = RequestMethod.POST)
+    public RDMResultVO createLink(@RequestBody EXADefinitionLink exaDefinition) {
+        RDMParamVO<EXADefinitionLink> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.createLink(var1);
+    }
+
+    @RequestMapping(value = "/exaDefinitionLink/batchCreate", method = RequestMethod.POST)
+    public RDMResultVO batchCreateLink(@RequestBody List<EXADefinitionLink> exaDefinition) {
+        RDMParamVO<List<EXADefinitionLink>> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.batchCreateLink(var1);
+    }
+
+    @RequestMapping(value = "/exaDefinitionLink/batchDelete", method = RequestMethod.POST)
+    public RDMResultVO batchDeleteLink(@RequestBody List<EXADefinitionLink> exaDefinition) {
+        RDMParamVO<List<EXADefinitionLink>> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.batchDeleteLink(var1);
+    }
 
 }
