@@ -2,6 +2,7 @@ package com.example.minibom.controller;
 
 import com.example.minibom.feign.EXADefinitionFeign;
 import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdDecryptDTO;
+import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdsModifierDTO;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
@@ -115,9 +116,9 @@ public class EXADefinitionController {
     }
 
     @RequestMapping(value = "/exaDefinitionLink/batchDelete", method = RequestMethod.POST)
-    public RDMResultVO batchDeleteLink(@RequestBody List<EXADefinitionLink> exaDefinition) {
-        RDMParamVO<List<EXADefinitionLink>> var1 = new RDMParamVO<>();
-        var1.setParams(exaDefinition);
+    public RDMResultVO batchDeleteLink(@RequestBody PersistObjectIdsModifierDTO dto) {
+        RDMParamVO<PersistObjectIdsModifierDTO> var1 = new RDMParamVO<>();
+        var1.setParams(dto);
         return exaDefinitionFeign.batchDeleteLink(var1);
     }
 

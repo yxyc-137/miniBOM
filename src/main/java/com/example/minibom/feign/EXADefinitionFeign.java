@@ -1,6 +1,7 @@
 package com.example.minibom.feign;
 
 import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdDecryptDTO;
+import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdsModifierDTO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
@@ -47,5 +48,5 @@ public interface EXADefinitionFeign {
     RDMResultVO batchCreateLink(@RequestBody RDMParamVO<List<EXADefinitionLink>> var1);
 
     @PostMapping("rdm/common/api/EXADefinitionLink/batchDelete")
-    RDMResultVO batchDeleteLink(@RequestBody RDMParamVO<List<EXADefinitionLink>> var1);
+    RDMResultVO batchDeleteLink(@RequestBody RDMParamVO<PersistObjectIdsModifierDTO> dto);
 }
