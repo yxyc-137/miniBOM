@@ -9,9 +9,11 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.xdm.bean.entity.ClassificationNode;
 import com.huawei.innovation.rdm.xdm.bean.entity.EXADefinition;
+import com.huawei.innovation.rdm.xdm.bean.enumerate.ModelTypeEnum;
 import com.huawei.innovation.rdm.xdm.bean.relation.EXADefinitionLink;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionCreateDTO;
 import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionQueryViewDTO;
+import com.huawei.innovation.rdm.xdm.dto.entity.EXADefinitionUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,29 +61,51 @@ public class EXADefinitionController {
         params.addCondition("name", ConditionType.EQUAL, name);
         return exaDefinitionFeign.find(var1);
     }
-//    //POST方法：创建属性（输入参数EXADefiniton(传name和nameEn）
-//    @RequestMapping(value = "exaDefinition/create", method = RequestMethod.POST)
-//    public RDMResultVO create(@RequestBody EXADefinitionCreateDTO dto) {
-//        RDMParamVO<EXADefinitionCreateDTO> var1 = new RDMParamVO<>();
-//        var1.setParams(dto);
-//        return exaDefinitionFeign.create("EXADefinition", var1);
-//    }
-//
-//    //POST方法：更新属性（输入参数EXADefiniton(传id和name和nameEn)
-//    @RequestMapping(value = "exaDefinition/update", method = RequestMethod.POST)
-//    public RDMResultVO update(@RequestBody EXADefinition exaDefinition) {
-//        RDMParamVO<EXADefinition> var1 = new RDMParamVO<>();
-//        var1.setParams(exaDefinition);
-//        return exaDefinitionFeign.update("EXADefinition", var1);
-//    }
-//
-//    //POST方法：删除属性（输入参数EXADefiniton(传id)
-//    @RequestMapping(value = "exaDefinition/delete", method = RequestMethod.POST)
-//    public RDMResultVO delete(@RequestBody EXADefinition exaDefinition) {
-//        RDMParamVO<EXADefinition> var1 = new RDMParamVO<>();
-//        var1.setParams(exaDefinition);
-//        return exaDefinitionFeign.delete("EXADefinition", var1);
-//    }
+
+    @RequestMapping(value = "/exaDefinition/nodeRefered/{pageSize}/{pageNum}", method = RequestMethod.POST)
+    public RDMResultVO nodeRefered(@PathVariable("pageSize") Integer pageSize,
+                                   @PathVariable("pageNum") Integer pageNum,
+                                   @RequestParam("id") Long exaDefinitionId) {
+        EXADefinitionQueryViewDTO var1 = new EXADefinitionQueryViewDTO();
+        var1.setId(exaDefinitionId);
+        return exaDefinitionFeign.NodeRefered(pageSize, pageNum, var1);
+    }
+
+    //POST方法：创建属性（输入参数EXADefiniton(传name、nameEn、type、description和descriptionEn）
+    @RequestMapping(value = "exaDefinition/create", method = RequestMethod.POST)
+    public RDMResultVO create(@RequestBody EXADefinitionCreateDTO dto) {
+        //实数
+        if (dto.getType().equals("DECIMAL")) {
+            dto.setConstraint("{\"associationType\":\"STRONG\",\"caseMode\":\"DEFAULT\",\"compose\":false,\"encryption\":false,\"graphIndex\":false,\"legalValueType\":\"\",\"length\":0,\"multiValue\":false,\"notnull\":false,\"optionalValue\":\"LEGAL_VALUE_TYPE\",\"precision\":2,\"range\":\"\",\"secretLevel\":\"internal\",\"stockInDB\":true,\"variable\":true}");
+        }
+        //整型
+        if (dto.getType().equals("INTEGER")) {
+            dto.setConstraint("{\"associationType\":\"STRONG\",\"caseMode\":\"DEFAULT\",\"compose\":false,\"encryption\":false,\"graphIndex\":false,\"legalValueType\":\"\",\"length\":0,\"multiValue\":false,\"notnull\":false,\"optionalValue\":\"LEGAL_VALUE_TYPE\",\"precision\":0,\"range\":\"\",\"secretLevel\":\"internal\",\"stockInDB\":true,\"variable\":true}");
+        }
+        //字符串
+        if (dto.getType().equals("STRING")) {
+            dto.setConstraint("{\"associationType\":\"STRONG\",\"caseMode\":\"DEFAULT\",\"compose\":false,\"encryption\":false,\"graphIndex\":false,\"legalValueType\":\"\",\"length\":200,\"multiValue\":false,\"notnull\":false,\"optionalValue\":\"LEGAL_VALUE_TYPE\",\"precision\":0,\"secretLevel\":\"internal\",\"stockInDB\":true,\"variable\":true}");
+        }
+        RDMParamVO<EXADefinitionCreateDTO> var1 = new RDMParamVO<>();
+        var1.setParams(dto);
+        return exaDefinitionFeign.create("EXADefinition", var1);
+    }
+
+    //POST方法：更新属性（输入参数EXADefiniton
+    @RequestMapping(value = "exaDefinition/update", method = RequestMethod.POST)
+    public RDMResultVO update(@RequestBody EXADefinitionUpdateDTO exaDefinition) {
+        RDMParamVO<EXADefinitionUpdateDTO> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.update("EXADefinition", var1);
+    }
+
+    //POST方法：删除属性（输入参数EXADefiniton(传id)
+    @RequestMapping(value = "exaDefinition/delete", method = RequestMethod.POST)
+    public RDMResultVO delete(@RequestBody EXADefinition exaDefinition) {
+        RDMParamVO<EXADefinition> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.delete("EXADefinition", var1);
+    }
 
     @RequestMapping(value = "/exaDefinitionLink/findAll", method = RequestMethod.POST)
     public RDMResultVO findAllLink() {
@@ -115,6 +139,12 @@ public class EXADefinitionController {
         return exaDefinitionFeign.batchCreateLink(var1);
     }
 
+    @RequestMapping(value = "/exaDefinitionLink/delete", method = RequestMethod.POST)
+    public RDMResultVO deleteLink(@RequestBody EXADefinitionLink exaDefinition) {
+        RDMParamVO<EXADefinitionLink> var1 = new RDMParamVO<>();
+        var1.setParams(exaDefinition);
+        return exaDefinitionFeign.deleteLink(var1);
+    }
     @RequestMapping(value = "/exaDefinitionLink/batchDelete", method = RequestMethod.POST)
     public RDMResultVO batchDeleteLink(@RequestBody PersistObjectIdsModifierDTO dto) {
         RDMParamVO<PersistObjectIdsModifierDTO> var1 = new RDMParamVO<>();
