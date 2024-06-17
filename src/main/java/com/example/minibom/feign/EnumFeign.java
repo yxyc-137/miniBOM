@@ -14,4 +14,7 @@ public interface EnumFeign {
     @GetMapping("rdm/basic/api/EXADefinition/queryAllEnumInfo")
     RDMResultVO queryAllEnumInfo();
 
+    @PostMapping("rdm/common/api/MeasuringUnit/find")
+    RDMResultVO findUnitType(@RequestBody RDMParamVO<QueryRequestVo> var1);
+
 }

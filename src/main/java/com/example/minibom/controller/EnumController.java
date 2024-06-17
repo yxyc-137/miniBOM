@@ -56,4 +56,13 @@ public class EnumController {
         }
         return enumValues;
     }
+
+    @RequestMapping(value = "/measuringUnit/find", method = RequestMethod.POST)
+    public RDMResultVO find() {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        return enumFeign.findUnitType(var1);
+    }
+
 }
