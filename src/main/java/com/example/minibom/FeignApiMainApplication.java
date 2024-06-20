@@ -6,6 +6,7 @@ package com.example.minibom;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,9 +15,10 @@ import org.springframework.context.annotation.ComponentScan;
  *
  * @since 2024-04-10
  */
-@SpringBootApplication
+@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
 @ComponentScan(basePackages = {"com.huawei.innovation", "com.example.minibom"})
 @EnableFeignClients
+
 public class FeignApiMainApplication {
     public static void main(String[] args) {
         SpringApplication.run(FeignApiMainApplication.class, args);
