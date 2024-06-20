@@ -12,10 +12,16 @@ import com.huawei.innovation.rdm.minibom.bean.entity.Part;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartCreateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateByAdminDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartViewDTO;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
+
+import static java.lang.Long.parseLong;
 
 /**
  * TestController
@@ -213,5 +219,45 @@ public class PartController {
         RDMParamVO<VersionMasterModifierDTO> var1 = new RDMParamVO<>();
         var1.setParams(part);
         return partFeign.deleteBranch("Part", var1);
+    }
+
+    //查询大版本下最新小版本
+    @RequestMapping(value = "/part/getLatestVersion", method = RequestMethod.POST)
+    public RDMResultVO getLatestVersion(@RequestBody VersionMasterDTO part) {
+        RDMParamVO<VersionMasterDTO> var1 = new RDMParamVO<>();
+        var1.setParams(part);
+        return partFeign.getVersionByMaster(var1);
+    }
+
+    //查询所有part的最新版本
+    @RequestMapping(value = "/part/getAllLatestPart", method = RequestMethod.POST)
+    public RDMResultVO getAllLatestPart() {
+        //新建一个List存储最新版本的part
+        List<Object> result = new ArrayList<>();
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        RDMResultVO all = partFeign.find("Part", var1);
+        //记录所有masterId（不重复）
+        HashSet<String> masterIdSet = new HashSet<>();
+        for (Object item : all.getData()) {
+            LinkedHashMap<String, Object> partMap = (LinkedHashMap<String, Object>) item;
+            Object master = partMap.get("master");
+            LinkedHashMap<String, Object> masterMap = (LinkedHashMap<String, Object>) master;
+            String masterId = masterMap.get("id").toString();
+            masterIdSet.add(masterId);
+        }
+        for (String mid : masterIdSet) {
+            VersionMasterDTO versionMasterDTO = new VersionMasterDTO();
+            versionMasterDTO.setMasterId(Long.parseLong(mid));
+            versionMasterDTO.setVersion("A");
+            RDMParamVO<VersionMasterDTO> var2 = new RDMParamVO<>();
+            var2.setParams(versionMasterDTO);
+            RDMResultVO latestVersion = partFeign.getVersionByMaster(var2);
+            result.add(latestVersion.getData().get(0));
+        }
+        RDMResultVO rdmResultVO = new RDMResultVO();
+        rdmResultVO.setData(result);
+        return rdmResultVO;
     }
 }

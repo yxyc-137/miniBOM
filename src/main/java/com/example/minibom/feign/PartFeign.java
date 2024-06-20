@@ -75,5 +75,8 @@ public interface PartFeign {
 
     @PostMapping("dynamic/api/{modelName}/deleteBranch")
     RDMResultVO deleteBranch(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<VersionMasterModifierDTO> var1);
+
+    @PostMapping("api/Part/getVersionByMaster")
+    RDMResultVO getVersionByMaster(@RequestBody RDMParamVO<VersionMasterDTO> var1);
 }
 
