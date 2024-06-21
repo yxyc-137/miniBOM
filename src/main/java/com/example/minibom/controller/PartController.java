@@ -258,6 +258,7 @@ public class PartController {
         }
         RDMResultVO rdmResultVO = new RDMResultVO();
         rdmResultVO.setData(result);
+        rdmResultVO.setResult("SUCCESS");
         return rdmResultVO;
     }
 }

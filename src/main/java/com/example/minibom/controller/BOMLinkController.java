@@ -37,6 +37,15 @@ public class BOMLinkController {
         return bomLinkFeign.find("BOMLink", var1);
     }
 
+    //根据source id查询BOMLink
+    @RequestMapping(value = "/bomlink/findBySourceId/{id}", method = RequestMethod.POST)
+    public RDMResultVO findBySourceId(@PathVariable String id) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("source.id", ConditionType.EQUAL, id);
+        return bomLinkFeign.find("BOMLink", var1);
+    }
 
     //通过id获得BOMLink（get）
 //    e.g.

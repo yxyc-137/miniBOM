@@ -1,6 +1,7 @@
 package com.example.minibom.controller;
 
 import com.example.minibom.feign.BOMUsesOccurrenceFeign;
+import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
@@ -22,6 +23,16 @@ public class BOMUsesOccurrenceController {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
+        return bomUsesOccurrenceFeign.find("BOMUsesOccurrence", var1);
+    }
+
+    //根据source id查询bomoccurrence信息
+    @RequestMapping(value = "bomUsesOccurrence/findBySourceId/{id}", method = RequestMethod.POST)
+    public  RDMResultVO findBySourceId(@PathVariable String id) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("bomLink.source.id", ConditionType.EQUAL, id);
         return bomUsesOccurrenceFeign.find("BOMUsesOccurrence", var1);
     }
 
