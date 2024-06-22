@@ -43,8 +43,8 @@ public class EXADefinitionController {
         return exaDefinitionFeign.get("EXADefinition", var1);
     }
 
-    @RequestMapping(value = "/exaDefinition/findById/{id}", method = RequestMethod.POST)
-    public RDMResultVO findById(@PathVariable String id) {
+    @RequestMapping(value = "/exaDefinition/findById", method = RequestMethod.POST)
+    public RDMResultVO findById(@RequestParam("id") String id) {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
@@ -53,8 +53,8 @@ public class EXADefinitionController {
     }
 
     //根据name查找分类节点信息（直接在url中传入name）
-    @RequestMapping(value = "/exaDefinition/findByName/{name}", method = RequestMethod.POST)
-    public RDMResultVO findByName(@PathVariable String name) {
+    @RequestMapping(value = "/exaDefinition/findByName", method = RequestMethod.POST)
+    public RDMResultVO findByName(@RequestParam("name") String name) {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
