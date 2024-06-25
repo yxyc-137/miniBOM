@@ -15,6 +15,7 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.minibom.bean.entity.Part;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartCreateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateByAdminDTO;
+import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartViewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -50,7 +51,7 @@ public interface PartFeign {
     RDMResultVO create(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartCreateDTO> var1);
 
     @PostMapping("dynamic/api/{modelName}/update")
-    RDMResultVO update(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<Part> var1);
+    RDMResultVO update(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartUpdateDTO> var1);
 
     @PostMapping("dynamic/api/{modelName}/delete")
     RDMResultVO delete(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<MasterIdModifierDTO> var1);

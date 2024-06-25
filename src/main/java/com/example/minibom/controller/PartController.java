@@ -11,6 +11,7 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.minibom.bean.entity.Part;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartCreateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateByAdminDTO;
+import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartViewDTO;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +150,27 @@ public class PartController {
         RDMParamVO<VersionUpdateAndCheckinDTO<PartUpdateByAdminDTO>> var1 = new RDMParamVO<>();
         var1.setParams(part);
         return partFeign.updateAndCheckin("Part", var1);
+    }
+
+
+    //更新part 请求体要有当前版本id，modifier(填创建该part的人)，以及需要修改的字段
+//    {
+//        "extAttrs": [
+//          {
+//                "name": "classification",
+//                "type": "CATEGORY",
+//                "value": 637300896258072576
+//          }
+//        ],
+//        "iterationNote": "try to update",
+//        "id": "646654662077853696",
+//        "modifier": "wenxinyu 4acff0b71e78401ea2874b6430ddc5a7"
+//    }
+    @RequestMapping(value = "/part/update", method = RequestMethod.POST)
+    public RDMResultVO update(@RequestBody PartUpdateDTO part) {
+        RDMParamVO<PartUpdateDTO> var1 = new RDMParamVO<>();
+        var1.setParams(part);
+        return partFeign.update("Part", var1);
     }
 
 
