@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -49,6 +50,15 @@ public class BomLinkService {
         var2.setParams(query);
         return bomLinkFeign.queryRelatedObjects("BOMLink", var2);
     }
+
+    public RDMResultVO findBomLink(Long sourceId, Long targetId) {
+        RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
+        QueryRequestVo params = new QueryRequestVo();
+        var1.setParams(params);
+        params.addCondition("source.id", ConditionType.EQUAL, sourceId);
+        params.addCondition("target.id", ConditionType.EQUAL, targetId);
+        return bomLinkFeign.find("BOMLink", var1);
+    }
     public Object create(BOMLinkCreateDTO link) {
         Long sourceId = link.getSource().getId();
         Long targetId = link.getTarget().getId();
@@ -58,6 +68,10 @@ public class BomLinkService {
         System.out.println(targetId);
         if (targetId.equals(masterId)) {
             throw new CustomException("不能添加自己为子项");
+        }
+        //判断该bomlink是否存在
+        if (!findBomLink(sourceId, targetId).getData().isEmpty()) {
+            throw new CustomException("该BOMLink已存在");
         }
         //查找targetId是否是source及以上的父项
         RDMResultVO findParent = findParent(masterId);
@@ -83,14 +97,20 @@ public class BomLinkService {
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
         RDMResultVO result = bomLinkFeign.find("BOMLink", var1);
+        //对第一层part去重
+        HashSet<Long> masterIdSet = new HashSet<>();
         List<Object> sourcelist = new ArrayList<>();
         for (Object item : result.getData()) {
             LinkedHashMap<String, Object> bomLinkMap = (LinkedHashMap<String, Object>)item;
             LinkedHashMap<String, Object> sourceMap = (LinkedHashMap<String, Object>)bomLinkMap.get("source");
-            Long sourceId = Long.parseLong((String)sourceMap.get("id"));
-            RDMResultVO findParent = findParent(sourceId);
+            LinkedHashMap<String, Object> masterMap = (LinkedHashMap<String, Object>)sourceMap.get("master");
+            Long sourceMasterId = Long.parseLong((String)masterMap.get("id"));
+            RDMResultVO findParent = findParent(sourceMasterId);
             if (findParent.getData().isEmpty()) {
-                sourcelist.add(sourceMap);
+                if (!masterIdSet.contains(sourceMasterId)) {
+                    masterIdSet.add(sourceMasterId);
+                    sourcelist.add(sourceMap);
+                }
             }
         }
         RDMResultVO rdmResultVO = new RDMResultVO();
