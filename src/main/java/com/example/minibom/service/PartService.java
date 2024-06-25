@@ -26,24 +26,36 @@ public class PartService {
         QueryRequestVo params = new QueryRequestVo();
         var1.setParams(params);
         RDMResultVO all = partFeign.find("Part", var1);
-        //记录所有masterId（不重复）
-        HashSet<String> masterIdSet = new HashSet<>();
+        //使用哈希表记录<masterId, Part>键值对
+        LinkedHashMap<Long, Object> latestVersionMap = new LinkedHashMap<>();
         for (Object item : all.getData()) {
             LinkedHashMap<String, Object> partMap = (LinkedHashMap<String, Object>) item;
             Object master = partMap.get("master");
             LinkedHashMap<String, Object> masterMap = (LinkedHashMap<String, Object>) master;
-            String masterId = masterMap.get("id").toString();
-            masterIdSet.add(masterId);
+            Long masterId = Long.parseLong(masterMap.get("id").toString());
+            latestVersionMap.put(masterId, partMap);
         }
-        for (String mid : masterIdSet) {
-            VersionMasterDTO versionMasterDTO = new VersionMasterDTO();
-            versionMasterDTO.setMasterId(Long.parseLong(mid));
-            versionMasterDTO.setVersion("A");
-            RDMParamVO<VersionMasterDTO> var2 = new RDMParamVO<>();
-            var2.setParams(versionMasterDTO);
-            RDMResultVO latestVersion = partFeign.getVersionByMaster(var2);
-            result.add(latestVersion.getData().get(0));
+        for (Object obj : latestVersionMap.values()) {
+            result.add(obj);
         }
+        //记录所有masterId（不重复）
+//        HashSet<String> masterIdSet = new HashSet<>();
+//        for (Object item : all.getData()) {
+//            LinkedHashMap<String, Object> partMap = (LinkedHashMap<String, Object>) item;
+//            Object master = partMap.get("master");
+//            LinkedHashMap<String, Object> masterMap = (LinkedHashMap<String, Object>) master;
+//            String masterId = masterMap.get("id").toString();
+//            masterIdSet.add(masterId);
+//        }
+//        for (String mid : masterIdSet) {
+//            VersionMasterDTO versionMasterDTO = new VersionMasterDTO();
+//            versionMasterDTO.setMasterId(Long.parseLong(mid));
+//            versionMasterDTO.setVersion("A");
+//            RDMParamVO<VersionMasterDTO> var2 = new RDMParamVO<>();
+//            var2.setParams(versionMasterDTO);
+//            RDMResultVO latestVersion = partFeign.getVersionByMaster(var2);
+//            result.add(latestVersion.getData().get(0));
+//        }
         RDMResultVO rdmResultVO = new RDMResultVO();
         rdmResultVO.setData(result);
         rdmResultVO.setResult("SUCCESS");
@@ -57,22 +69,16 @@ public class PartService {
         var1.setParams(params);
         params.addCondition("name", ConditionType.EQUAL, name);
         RDMResultVO all = partFeign.find("Part", var1);
-        HashSet<String> masterIdSet = new HashSet<>();
+        LinkedHashMap<Long, Object> latestVersionMap = new LinkedHashMap<>();
         for (Object item : all.getData()) {
             LinkedHashMap<String, Object> partMap = (LinkedHashMap<String, Object>) item;
             Object master = partMap.get("master");
             LinkedHashMap<String, Object> masterMap = (LinkedHashMap<String, Object>) master;
-            String masterId = masterMap.get("id").toString();
-            masterIdSet.add(masterId);
+            Long masterId = Long.parseLong(masterMap.get("id").toString());
+            latestVersionMap.put(masterId, partMap);
         }
-        for (String mid : masterIdSet) {
-            VersionMasterDTO versionMasterDTO = new VersionMasterDTO();
-            versionMasterDTO.setMasterId(Long.parseLong(mid));
-            versionMasterDTO.setVersion("A");
-            RDMParamVO<VersionMasterDTO> var2 = new RDMParamVO<>();
-            var2.setParams(versionMasterDTO);
-            RDMResultVO latestVersion = partFeign.getVersionByMaster(var2);
-            result.add(latestVersion.getData().get(0));
+        for (Object obj : latestVersionMap.values()) {
+            result.add(obj);
         }
         RDMResultVO rdmResultVO = new RDMResultVO();
         rdmResultVO.setData(result);

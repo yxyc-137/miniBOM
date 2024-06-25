@@ -81,8 +81,12 @@ public class BOMLinkController {
 //    }
     @RequestMapping(value = "/bomlink/create", method = RequestMethod.POST)
     public Result create(@RequestBody BOMLinkCreateDTO link) {
-        bomLinkService.create(link);
-        return Result.success();
+        try {
+            Object bomLink = bomLinkService.create(link);
+            return Result.success(bomLink);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     //更新BOMLink, 请求体要有id和需要改的字段（只能改quantity和sequenceNumber）

@@ -10,6 +10,7 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 import com.huawei.innovation.rdm.minibom.bean.entity.Part;
+import com.huawei.innovation.rdm.minibom.bean.relation.BOMLink;
 import com.huawei.innovation.rdm.minibom.dto.relation.BOMLinkCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class BomLinkService {
         var2.setParams(query);
         return bomLinkFeign.queryRelatedObjects("BOMLink", var2);
     }
-    public void create(BOMLinkCreateDTO link) {
+    public Object create(BOMLinkCreateDTO link) {
         Long sourceId = link.getSource().getId();
         Long targetId = link.getTarget().getId();
         //根据sourceid查找part的masterId
@@ -73,7 +74,7 @@ public class BomLinkService {
         }
         RDMParamVO<BOMLinkCreateDTO> var3 = new RDMParamVO<>();
         var3.setParams(link);
-        bomLinkFeign.create("BOMLink", var3);
+        return bomLinkFeign.create("BOMLink", var3).getData().get(0);
     }
 
     //找到所有没有父节点的项
