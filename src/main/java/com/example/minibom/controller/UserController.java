@@ -102,8 +102,8 @@ public class UserController {
     //注册功能
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     public Result register(@RequestBody User user) {
-            userService.userRegister(user);
-            return Result.success();
+        userService.userRegister(user);
+        return Result.success();
     }
     //登录功能
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)

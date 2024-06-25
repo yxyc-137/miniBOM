@@ -1,7 +1,9 @@
 package com.example.minibom.controller;
 
+import com.example.minibom.common.Result;
 import com.example.minibom.feign.BOMLinkFeign;
 import com.example.minibom.feign.PartFeign;
+import com.example.minibom.service.BomLinkService;
 import com.huawei.innovation.rdm.coresdk.basic.dto.*;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
@@ -10,10 +12,13 @@ import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 
 
 import com.huawei.innovation.rdm.minibom.bean.entity.Part;
+import com.huawei.innovation.rdm.minibom.bean.entity.PartMaster;
 import com.huawei.innovation.rdm.minibom.dto.relation.BOMLinkCreateDTO;
 import com.huawei.innovation.rdm.minibom.dto.relation.BOMLinkUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedHashMap;
 
 @RequestMapping("/feign")
 @RestController
@@ -21,6 +26,8 @@ public class BOMLinkController {
     @Autowired
     private BOMLinkFeign bomLinkFeign;
 
+    @Autowired
+    private BomLinkService bomLinkService;
     //打印request日志
 
     /**
@@ -73,13 +80,14 @@ public class BOMLinkController {
 //        "quantity":2.0
 //    }
     @RequestMapping(value = "/bomlink/create", method = RequestMethod.POST)
-    public RDMResultVO create(@RequestBody BOMLinkCreateDTO link) {
-        RDMParamVO<BOMLinkCreateDTO> var1 = new RDMParamVO<>();
-        var1.setParams(link);
-        return bomLinkFeign.create("BOMLink", var1);
+    public Result create(@RequestBody BOMLinkCreateDTO link) {
+        try {
+            Object bomLink = bomLinkService.create(link);
+            return Result.success(bomLink);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
-
-
 
     //更新BOMLink, 请求体要有id和需要改的字段（只能改quantity和sequenceNumber）
 //    {
@@ -121,5 +129,10 @@ public class BOMLinkController {
         RDMParamVO<GenericLinkQueryDTO> var1 = new RDMParamVO<>();
         var1.setParams(link);
         return bomLinkFeign.queryRelatedObjects("BOMLink", var1);
+    }
+
+    @RequestMapping(value = "/bomlink/findAllSourcePart", method = RequestMethod.POST)
+    public RDMResultVO findAllSourcePart() {
+        return bomLinkService.findAllSourcePart();
     }
 }
