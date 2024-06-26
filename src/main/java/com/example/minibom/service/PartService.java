@@ -4,8 +4,10 @@ import com.example.minibom.feign.PartFeign;
 import com.huawei.innovation.rdm.coresdk.basic.dto.VersionMasterDTO;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
+import com.huawei.innovation.rdm.coresdk.basic.vo.RDMErrorVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
+import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,5 +86,27 @@ public class PartService {
         rdmResultVO.setData(result);
         rdmResultVO.setResult("SUCCESS");
         return rdmResultVO;
+    }
+    public RDMResultVO update(PartUpdateDTO part) {
+        RDMResultVO result = new RDMResultVO();
+        RDMParamVO<PartUpdateDTO> var1 = new RDMParamVO<>();
+        var1.setParams(part);
+        LinkedHashMap<String, Object> response = partFeign.update("Part", var1);
+        System.out.println(response.toString());
+        //如果返回结果中result字段为SUCCESS，则读取data中的所有对象
+        if (response.get("result").equals("SUCCESS")) {
+            result.setResult("SUCCESS");
+            return result;
+        }
+        else {
+            result.setResult("FAILED");
+            RDMErrorVO error = new RDMErrorVO();
+            error.setCode(response.get("error_code").toString());
+            error.setMessage(response.get("error_msg").toString());
+            List<RDMErrorVO> errors = new ArrayList<>();
+            errors.add(error);
+            result.setErrors(errors);
+            return result;
+        }
     }
 }

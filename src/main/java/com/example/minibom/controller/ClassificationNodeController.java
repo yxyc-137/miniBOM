@@ -2,12 +2,11 @@ package com.example.minibom.controller;
 
 
 import com.example.minibom.feign.ClassificationNodeFeign;
+import com.example.minibom.service.ClassificationNodeService;
 import com.huawei.innovation.rdm.coresdk.basic.dto.QueryChildListDTO;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
-import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
-import com.huawei.innovation.rdm.coresdk.basic.vo.RDMPageVO;
-import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
-import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
+import com.huawei.innovation.rdm.coresdk.basic.enums.JoinerType;
+import com.huawei.innovation.rdm.coresdk.basic.vo.*;
 import com.huawei.innovation.rdm.xdm.bean.entity.ClassificationNode;
 import com.huawei.innovation.rdm.xdm.dto.entity.ClassificationNodeQueryViewDTO;
 import feign.Param;
@@ -25,6 +24,9 @@ public class ClassificationNodeController {
 
     @Autowired
     private ClassificationNodeFeign classificationNodeFeign;
+
+    @Autowired
+    private ClassificationNodeService classificationNodeService;
 
     //GET方法：根据分类节点id获取子节点（输入参数parentId)
     @RequestMapping(value = "classificationNode/getChildren", method = RequestMethod.GET)
@@ -75,8 +77,11 @@ public class ClassificationNodeController {
     public RDMResultVO findByName(@PathVariable String name) {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
+        QueryCondition orCondition = params.begin(JoinerType.OR);
+        // 添加中文名字查询条件
+        orCondition.addCondition("name", ConditionType.EQUAL, name);
+        orCondition.addCondition("businessCode", ConditionType.EQUAL, name);
         var1.setParams(params);
-        params.addCondition("name", ConditionType.EQUAL, name);
         return classificationNodeFeign.find("ClassificationNode", var1);
     }
     //POST方法：创建分类节点（输入参数ClassificationNode(传name和nameEn）
@@ -98,9 +103,7 @@ public class ClassificationNodeController {
     //POST方法：删除分类节点（输入参数ClassificationNode(传id)
     @RequestMapping(value = "classificationNode/delete", method = RequestMethod.POST)
     public RDMResultVO delete(@RequestBody ClassificationNode classificationNode) {
-        RDMParamVO<ClassificationNode> var1 = new RDMParamVO<>();
-        var1.setParams(classificationNode);
-        return classificationNodeFeign.delete("ClassificationNode", var1);
+        return classificationNodeService.delete(classificationNode);
     }
 
     //GET方法：根据分类节点id获取分类节点信息（输入参数linkId：分类节点id)

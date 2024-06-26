@@ -5,6 +5,7 @@ import com.example.minibom.service.PartService;
 import com.huawei.innovation.rdm.coresdk.basic.dto.*;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
+import com.huawei.innovation.rdm.coresdk.basic.vo.RDMErrorVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
 
@@ -170,9 +171,7 @@ public class PartController {
 //    }
     @RequestMapping(value = "/part/update", method = RequestMethod.POST)
     public RDMResultVO update(@RequestBody PartUpdateDTO part) {
-        RDMParamVO<PartUpdateDTO> var1 = new RDMParamVO<>();
-        var1.setParams(part);
-        return partFeign.update("Part", var1);
+        return partService.update(part);
     }
 
 

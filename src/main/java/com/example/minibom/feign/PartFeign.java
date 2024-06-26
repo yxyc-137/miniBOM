@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.LinkedHashMap;
+
 /**
  * 基础服务feign
  *
@@ -51,7 +53,7 @@ public interface PartFeign {
     RDMResultVO create(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartCreateDTO> var1);
 
     @PostMapping("dynamic/api/{modelName}/update")
-    RDMResultVO update(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartUpdateDTO> var1);
+    LinkedHashMap<String, Object> update(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartUpdateDTO> var1);
 
     @PostMapping("dynamic/api/{modelName}/delete")
     RDMResultVO delete(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<MasterIdModifierDTO> var1);

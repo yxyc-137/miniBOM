@@ -1,9 +1,12 @@
 package com.example.minibom.controller;
 
+import com.example.minibom.common.Result;
 import com.example.minibom.feign.EXADefinitionFeign;
 import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdDecryptDTO;
 import com.huawei.innovation.rdm.coresdk.basic.dto.PersistObjectIdsModifierDTO;
 import com.huawei.innovation.rdm.coresdk.basic.enums.ConditionType;
+import com.huawei.innovation.rdm.coresdk.basic.enums.JoinerType;
+import com.huawei.innovation.rdm.coresdk.basic.vo.QueryCondition;
 import com.huawei.innovation.rdm.coresdk.basic.vo.QueryRequestVo;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMParamVO;
 import com.huawei.innovation.rdm.coresdk.basic.vo.RDMResultVO;
@@ -24,8 +27,6 @@ import java.util.List;
 public class EXADefinitionController {
     @Autowired
     private EXADefinitionFeign exaDefinitionFeign;
-
-    //属性只写了find和get方法
 
     //POST方法：分页查询属性信息（路径入参pageSize和curPage)
     @RequestMapping(value = "exaDefinition/find", method = RequestMethod.POST)
@@ -57,8 +58,12 @@ public class EXADefinitionController {
     public RDMResultVO findByName(@RequestParam("name") String name) {
         RDMParamVO<QueryRequestVo> var1 = new RDMParamVO<>();
         QueryRequestVo params = new QueryRequestVo();
+        // 开始一个OR条件组
+        QueryCondition orCondition = params.begin(JoinerType.OR);
+        // 添加中文名字查询条件
+        orCondition.addCondition("name", ConditionType.EQUAL, name);
+        orCondition.addCondition("nameEn", ConditionType.EQUAL, name);
         var1.setParams(params);
-        params.addCondition("name", ConditionType.EQUAL, name);
         return exaDefinitionFeign.find(var1);
     }
 
