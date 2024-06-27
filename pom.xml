@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
-        <idme.jar.path>E:/miniBOM/minibom-1.0.0-optimization-SNAPSHOT-user</idme.jar.path>
+        <idme.jar.path>E:/idme-minibom/miniBOM/minibom-1.0.0-optimization-SNAPSHOT-user</idme.jar.path>
         <idme.app.name>minibom</idme.app.name>
     </properties>
     <dependencies>
