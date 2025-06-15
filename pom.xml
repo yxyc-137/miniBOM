@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
-        <idme.jar.path>E:/idme-minibom/miniBOM/minibom-1.0.0-optimization-SNAPSHOT-user</idme.jar.path>
+        <idme.jar.path>D:\code_project\IJ_project\miniBOM\minibom-1.0.0-optimization-SNAPSHOT-user</idme.jar.path>
         <idme.app.name>minibom</idme.app.name>
     </properties>
     <dependencies>
@@ -129,6 +129,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
         </dependency>
 
 

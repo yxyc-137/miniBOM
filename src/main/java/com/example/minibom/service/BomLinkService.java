@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static sun.misc.Version.println;
 
 @Service
 public class BomLinkService {

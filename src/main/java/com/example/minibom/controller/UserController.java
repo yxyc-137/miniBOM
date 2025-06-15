@@ -23,11 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * TestController
- *
- * @since 2024-04-11
- */
+
 @RequestMapping("/feign")
 @RestController
 public class UserController {

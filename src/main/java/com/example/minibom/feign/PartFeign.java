@@ -16,13 +16,11 @@ import com.huawei.innovation.rdm.minibom.bean.entity.Part;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartCreateDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateByAdminDTO;
 import com.huawei.innovation.rdm.minibom.dto.entity.PartUpdateDTO;
-import com.huawei.innovation.rdm.minibom.dto.entity.PartViewDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
 
@@ -37,19 +35,19 @@ public interface PartFeign {
      * 查询接口
      *
      * @param modelName 模型名称
-     * @param var1 请求参数
-     * @param pageSize 分页大小
-     * @param curPage 当前页
+     * @param var1      请求参数
+     * @param pageSize  分页大小
+     * @param curPage   当前页
      * @return 查询结果
      */
 
-    @PostMapping("dynamic/api/{modelName}/find")
+    @PostMapping("api/{modelName}/find")
     RDMResultVO find(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<QueryRequestVo> var1);
 
-    @PostMapping("dynamic/api/{modelName}/get")
+    @PostMapping("api/{modelName}/get")
     RDMResultVO get(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<Part> var1);
 
-    @PostMapping("dynamic/api/{modelName}/create")
+    @PostMapping("api/{modelName}/create")
     RDMResultVO create(@PathVariable("modelName") String modelName, @RequestBody RDMParamVO<PartCreateDTO> var1);
 
     @PostMapping("dynamic/api/{modelName}/update")

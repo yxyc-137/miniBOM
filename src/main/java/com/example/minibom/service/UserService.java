@@ -58,7 +58,7 @@ public class UserService {
         user.setName(registerQo.getName());
         user.setPassword(passwordMd5);
         user.setEmail(registerQo.getEmail());
-        user.setEmail(registerQo.getTelephone());
+        user.setTelephone(registerQo.getTelephone());
         user.setHash(salt);
 
         RDMParamVO<User> userRDMParamVO = new RDMParamVO<>();

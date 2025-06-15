@@ -26,11 +26,7 @@ import java.util.List;
 
 import static java.lang.Long.parseLong;
 
-/**
- * TestController
- *
- * @since 2024-04-11
- */
+
 @RequestMapping("/feign")
 
 @RestController
